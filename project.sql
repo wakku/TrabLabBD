@@ -69,6 +69,7 @@ CREATE TABLE VISUALIZACAO(
 CREATE TABLE AVALIACAO(
   id_avaliacao integer DEFAULT NEXTVAL('AVALIACAO_ID_AVALIACAO_SEQ') PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL,
   nota smallint check (nota > 0) check (nota < 5),
   comentario char varying(1000)
 );
@@ -79,13 +80,14 @@ CREATE TABLE PRODUTO(
   categoria char varying(100) NOT NULL,
   em_estoque integer check (em_estoque > 0),
   minimo_em_estoque integer check (minimo_em_estoque > 0),
-  maximo_em_estoque integer check (maximo_em_estoque > 0)
+  maximo_em_estoque integer check (maximo_em_estoque > 0),
   preco integer NOT NULL check(preco > 0)
 );
 
 CREATE TABLE PRODUTO_FORNECEDOR(
-  id_produto integer DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
-  id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL
+  id_prod_forn integer DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
+  id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL
 );
 
 CREATE TABLE FORNECEDOR(
