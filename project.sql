@@ -52,7 +52,7 @@ CREATE TABLE FRETE(
 );
 
 CREATE TABLE VENDA(
-  id_venda integer DEFAULT NEXTVAL ('VENDA_ID_VENDA_SEQ')PRIMARY KEY,
+  id_venda bigint DEFAULT NEXTVAL ('VENDA_ID_VENDA_SEQ')PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
   id_frete integer REFERENCES cliente(id_cliente) NOT NULL,
   produtos integer[] NOT NULL,
@@ -60,14 +60,14 @@ CREATE TABLE VENDA(
 );
 
 CREATE TABLE VISUALIZACAO(
-  id_visualizacao bigint DEFAULT NEXTVAL ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') PRIMARY KEY,
+  id_visualizacao integer DEFAULT NEXTVAL ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_produto bigint REFERENCES produto(id_produto) NOT NULL,
   dia_hora timestamp DEFAULT now()
 );
 
 CREATE TABLE COMENTARIO(
-  id_comentario bigint DEFAULT NEXTVAL ('COMENTARIO_ID_COMENTARIO_SEQ')PRIMARY KEY,
+  id_comentario integer DEFAULT NEXTVAL ('COMENTARIO_ID_COMENTARIO_SEQ')PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,	
   cometario char varying(1000) NOT NULL
 );
@@ -80,7 +80,7 @@ CREATE TABLE AVALIACAO(
 );
 
 CREATE TABLE PRODUTO(
-  id_produto integer DEFAULT NEXTVAL('PRODUTO_ID_PRODUTO_SEQ') PRIMARY KEY,
+  id_produto bigint DEFAULT NEXTVAL('PRODUTO_ID_PRODUTO_SEQ') PRIMARY KEY,
   imagem oid,
   id_categoria integer REFERENCES categoria(id_categoria),
   em_estoque integer check (em_estoque > 0),
@@ -89,7 +89,7 @@ CREATE TABLE PRODUTO(
 );
 
 CREATE TABLE PRODUTO_FORNECEDOR(
-  id_produto integer DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
+  id_produto bigint DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
   id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL
 );
 
@@ -109,12 +109,12 @@ CREATE TABLE CATEGORIA(
 
 CREATE TABLE PRECO(
   id_preco bigint DEFAULT NEXTVAL ('PRECO_ID_PRECO_SEQ') PRIMARY KEY,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_produto bigint REFERENCES produto(id_produto) NOT NULL,
   preco integer NOT NULL check(preco > 0)
 );
 
 CREATE TABLE PROMOCAO(
-  id_promocao bigint DEFAULT NEXTVAL ('PROMOCAO_ID_PROMOCAO_SEQ') PRIMARY KEY,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_promocao integer DEFAULT NEXTVAL ('PROMOCAO_ID_PROMOCAO_SEQ') PRIMARY KEY,
+  id_produto bigint REFERENCES produto(id_produto) NOT NULL,
   preco integer NOT NULL check (preco > 0)
 );
