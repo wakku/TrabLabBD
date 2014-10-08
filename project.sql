@@ -86,6 +86,7 @@ CREATE TABLE PRODUTO(
   em_estoque integer check (em_estoque > 0),
   minimo_em_estoque integer check (minimo_em_estoque > 0),
   maximo_em_estoque integer check (maximo_em_estoque > 0)
+  preco integer NOT NULL check(preco > 0)
 );
 
 CREATE TABLE PRODUTO_FORNECEDOR(
@@ -105,12 +106,6 @@ CREATE TABLE FORNECEDOR(
 CREATE TABLE CATEGORIA(
   id_categoria integer DEFAULT NEXTVAL ('CATEGORIA_ID_CATEGORIA_SEQ')PRIMARY KEY,
   descricao char varying(100) NOT NULL
-);
-
-CREATE TABLE PRECO(
-  id_preco bigint DEFAULT NEXTVAL ('PRECO_ID_PRECO_SEQ') PRIMARY KEY,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
-  preco integer NOT NULL check(preco > 0)
 );
 
 CREATE TABLE PROMOCAO(
