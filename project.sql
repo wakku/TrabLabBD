@@ -76,7 +76,7 @@ CREATE TABLE AVALIACAO(
 CREATE TABLE PRODUTO(
   id_produto integer DEFAULT NEXTVAL('PRODUTO_ID_PRODUTO_SEQ') PRIMARY KEY,
   imagem oid,
-  id_categoria integer REFERENCES categoria(id_categoria),
+  categoria char varying(100) NOT NULL,
   em_estoque integer check (em_estoque > 0),
   minimo_em_estoque integer check (minimo_em_estoque > 0),
   maximo_em_estoque integer check (maximo_em_estoque > 0)
@@ -95,11 +95,6 @@ CREATE TABLE FORNECEDOR(
   telefone char varying (15),
   email char varying (40),
   id_endereco integer REFERENCES endereco(id_endereco) NOT NULL
-);
-
-CREATE TABLE CATEGORIA(
-  id_categoria integer DEFAULT NEXTVAL ('CATEGORIA_ID_CATEGORIA_SEQ')PRIMARY KEY,
-  descricao char varying(100) NOT NULL
 );
 
 CREATE TABLE PROMOCAO(
