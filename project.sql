@@ -66,12 +66,6 @@ CREATE TABLE VISUALIZACAO(
   dia_hora timestamp DEFAULT now()
 );
 
-CREATE TABLE COMENTARIO(
-  id_comentario bigint DEFAULT NEXTVAL ('COMENTARIO_ID_COMENTARIO_SEQ')PRIMARY KEY,
-  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,	
-  cometario char varying(1000) NOT NULL
-);
-
 CREATE TABLE AVALIACAO(
   id_avaliacao integer DEFAULT NEXTVAL('AVALIACAO_ID_AVALIACAO_SEQ') PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
