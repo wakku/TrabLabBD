@@ -1,5 +1,6 @@
+CREATE SEQUENCE USUARIO_ID_USUARIO_SEQ;
 CREATE SEQUENCE CLIENTE_ID_CLIENTE_SEQ;
-CREATE SEQUENCE VENDA_ID_VENDA_SEQ;
+CREATE SEQUENCE COMPRA_ID_COMPRA_SEQ;
 CREATE SEQUENCE ENDERECO_ID_ENDERECO_SEQ;
 CREATE SEQUENCE FRETE_ID_FRETE_SEQ;
 CREATE SEQUENCE VISUALIZACAO_ID_VISUALIZACAO_SEQ;
@@ -13,7 +14,7 @@ CREATE SEQUENCE PRECO_ID_PRECO_SEQ;
 CREATE SEQUENCE PROMOCAO_ID_PROMOCAO_SEQ;
 
 --DROP TABLE CLIENTE_ID_CLIENTE_SEQ CASCADE;
---DROP TABLE VENDA_ID_VENDA_SEQ CASCADE;
+--DROP TABLE COMPRA_ID_COMPRA_SEQ CASCADE;
 --DROP TABLE ENDERECO_ID_ENDERECO_SEQ CASCADE;
 --DROP TABLE FRETE_ID_FRETE_SEQ CASCADE;
 --DROP TABLE VISUALIZACAO_ID_VISUALIZACAO_SEQ CASCADE;
@@ -26,80 +27,86 @@ CREATE SEQUENCE PROMOCAO_ID_PROMOCAO_SEQ;
 --DROP TABLE PRECO_ID_PRECO_SEQ CASCADE;
 --DROP TABLE PROMOCAO_ID_PROMOCAO_SEQ CASCADE;
 
-CREATE TABLE CLIENTE(
-  id_cliente integer DEFAULT NEXTVAL ('CLIENTE_ID_CLIENTE_SEQ') PRIMARY KEY,
-  nome_cliente char varying(70) NOT NULL,
+create table USUARIO(
+    id_usuario integer DEFAULT NEXTVAL ('USUARIO_ID_USUARIO_SEQ') PRIMARY KEY,
+  nome_cliente varchar(70) NOT NULL,
   cpf char(11) NOT NULL UNIQUE,
-  telefone char varying (15),
-  email char varying (40),
+  telefone varchar (15),
+  email varchar (40),    
+);
+
+create table ADMIN(
+    id_admin int
+);
+
+create table CLIENTE(
+  id_cliente integer PRIMARY KEY DEFAULT NEXTVAL ('CLIENTE_ID_CLIENTE_SEQ'),
   id_endereco integer REFERENCES endereco(id_endereco) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
 );
 
-CREATE TABLE ENDERECO(
-  id_endereco integer DEFAULT NEXTVAL ('ENDERECO_ID_ENDERECO_SEQ') PRIMARY KEY,
-  logradouro char varying(50) NOT NULL,
-  numero char varying(6) NOT NULL,
-  complemento char varying(30),
-  cidade char varying(30) NOT NULL,
+create table ENDERECO(
+  id_endereco integer PRIMARY KEY DEFAULT NEXTVAL ('ENDERECO_ID_ENDERECO_SEQ'),
+  logradouro varchar(50) NOT NULL,
+  numero varchar(6) NOT NULL,
+  complemento varchar(30),
+  cep char(8) NOT NULL,
+  cidade varchar(30) NOT NULL,
   estado char(2) NOT NULL
 );
 
-CREATE TABLE FRETE(
+create table FRETE(
   id_frete integer DEFAULT NEXTVAL ('FRETE_ID_FRETE_SEQ')PRIMARY KEY,
   cep_inicio char(8) NOT NULL,
   cep_final char(8) NOT NULL,
   preco integer DEFAULT 0
 );
 
-CREATE TABLE VENDA(
-  id_venda integer DEFAULT NEXTVAL ('VENDA_ID_VENDA_SEQ')PRIMARY KEY,
+create table COMPRA(
+  id_venda integer DEFAULT NEXTVAL ('COMPRA_ID_COMPRA_SEQ')PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   id_frete integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   produtos integer[] NOT NULL,
   dia_hora timestamp DEFAULT now()
 );
 
-CREATE TABLE VISUALIZACAO(
+create table VISUALIZACAO(
   id_visualizacao bigint DEFAULT NEXTVAL ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   dia_hora timestamp DEFAULT now()
 );
 
-CREATE TABLE AVALIACAO(
+create table AVALIACAO(
   id_avaliacao integer DEFAULT NEXTVAL('AVALIACAO_ID_AVALIACAO_SEQ') PRIMARY KEY,
   id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   nota smallint check (nota > 0) check (nota < 5),
-  comentario char varying(1000)
+  comentario varchar(1000)
 );
 
-CREATE TABLE PRODUTO(
+create table PRODUTO(
   id_produto integer DEFAULT NEXTVAL('PRODUTO_ID_PRODUTO_SEQ') PRIMARY KEY,
   imagem oid,
-  categoria char varying(100) NOT NULL,
+  categoria varchar(100) NOT NULL,
   em_estoque integer check (em_estoque > 0),
   minimo_em_estoque integer check (minimo_em_estoque > 0),
   maximo_em_estoque integer check (maximo_em_estoque > 0),
   preco integer NOT NULL check(preco > 0)
 );
 
-CREATE TABLE PRODUTO_FORNECEDOR(
-  id_prod_forn integer DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
-  id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
+create table LIVRO(
+    editora varchar(80) not null
 );
 
-CREATE TABLE FORNECEDOR(
-  id_fornecedor integer DEFAULT NEXTVAL (' FORNECEDOR_ID_FORNECEDOR_SEQ') PRIMARY KEY,
-  nome_fornecedor integer NOT NULL,
-  cnpj char(14) NOT NULL UNIQUE,
-  telefone char varying (15),
-  email char varying (40),
-  id_endereco integer REFERENCES endereco(id_endereco) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
+create table CD(
+    gravadora varchar(80) not null
 );
 
-CREATE TABLE PROMOCAO(
+create table DVD(
+    classificacao int
+);
+
+create table PROMOCAO(
   id_promocao bigint DEFAULT NEXTVAL ('PROMOCAO_ID_PROMOCAO_SEQ') PRIMARY KEY,
   id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   preco integer NOT NULL check (preco > 0)
