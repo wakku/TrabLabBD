@@ -29,10 +29,10 @@ CREATE SEQUENCE PROMOCAO_ID_PROMOCAO_SEQ;
 CREATE TABLE CLIENTE(
   id_cliente integer DEFAULT NEXTVAL ('CLIENTE_ID_CLIENTE_SEQ') PRIMARY KEY,
   nome_cliente char varying(70) NOT NULL,
-  cpf char(11) NOT NULL unique,
+  cpf char(11) NOT NULL UNIQUE,
   telefone char varying (15),
   email char varying (40),
-  id_endereco integer REFERENCES endereco(id_endereco) NOT NULL
+  id_endereco integer REFERENCES endereco(id_endereco) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE ENDERECO(
@@ -53,23 +53,23 @@ CREATE TABLE FRETE(
 
 CREATE TABLE VENDA(
   id_venda integer DEFAULT NEXTVAL ('VENDA_ID_VENDA_SEQ')PRIMARY KEY,
-  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
-  id_frete integer REFERENCES cliente(id_cliente) NOT NULL,
+  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
+  id_frete integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   produtos integer[] NOT NULL,
   dia_hora timestamp DEFAULT now()
 );
 
 CREATE TABLE VISUALIZACAO(
   id_visualizacao bigint DEFAULT NEXTVAL ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') PRIMARY KEY,
-  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   dia_hora timestamp DEFAULT now()
 );
 
 CREATE TABLE AVALIACAO(
   id_avaliacao integer DEFAULT NEXTVAL('AVALIACAO_ID_AVALIACAO_SEQ') PRIMARY KEY,
-  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_cliente integer REFERENCES cliente(id_cliente) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   nota smallint check (nota > 0) check (nota < 5),
   comentario char varying(1000)
 );
@@ -86,21 +86,21 @@ CREATE TABLE PRODUTO(
 
 CREATE TABLE PRODUTO_FORNECEDOR(
   id_prod_forn integer DEFAULT NEXTVAL('PRODUTO_FORNECEDOR_ID_PRODUTO_FORNECEDOR_SEQ') PRIMARY KEY,
-  id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL
+  id_fornecedor integer REFERENCES fornecedor(id_fornecedor) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE FORNECEDOR(
   id_fornecedor integer DEFAULT NEXTVAL (' FORNECEDOR_ID_FORNECEDOR_SEQ') PRIMARY KEY,
   nome_fornecedor integer NOT NULL,
-  cnpj char(14) NOT NULL unique,
+  cnpj char(14) NOT NULL UNIQUE,
   telefone char varying (15),
   email char varying (40),
-  id_endereco integer REFERENCES endereco(id_endereco) NOT NULL
+  id_endereco integer REFERENCES endereco(id_endereco) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE
 );
 
 CREATE TABLE PROMOCAO(
   id_promocao bigint DEFAULT NEXTVAL ('PROMOCAO_ID_PROMOCAO_SEQ') PRIMARY KEY,
-  id_produto integer REFERENCES produto(id_produto) NOT NULL,
+  id_produto integer REFERENCES produto(id_produto) NOT NULL ON UPDATE CASCADE ON DELETE CASCADE,
   preco integer NOT NULL check (preco > 0)
 );
