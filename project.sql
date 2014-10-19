@@ -18,7 +18,7 @@ create table USUARIO(
 
 create table TELEFONE(
     usuario int references usuario(id_usuario) on update cascade on delete cascade,
-    telefone varchar(15)
+    telefone varchar(15),
     primary key (usuario, telefone)
 );
 
@@ -46,10 +46,10 @@ create table COMPRA(
 	data timestamp default now(),
 	cliente int references cliente(id_cliente) not null on update cascade on delete cascade,
 	frete decimal(5,2),
-	nota_fiscal int,
-    preco decimal(5,2),
-    promocao
-	dia_hora timestamp default now()
+	nota_fiscal int not null,
+    preco_total decimal(5,2) not null check (preco > 0),
+    promocao decimal(2,2),
+	data timestamp default now()
 );
 
 create table VISUALIZACAO(
@@ -71,7 +71,7 @@ create table PRODUTO(
 	id_produto int primary key default nextval('PRODUTO_ID_PRODUTO_SEQ'),
 	cod_barras int not null unique,
     nome varchar(30) not null,
-    descricao text 
+    descricao varchar (1000), 
 	imagem oid,
 	categoria varchar(100) not null,
 	estoque int check (estoque >= 0),
