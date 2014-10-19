@@ -16,6 +16,12 @@ create table USUARIO(
 	tipo smallint not null
 );
 
+create table TELEFONE(
+    usuario int references usuario(id_usuario) on update cascade on delete cascade,
+    telefone varchar(15)
+    primary key (usuario, telefone)
+);
+
 create table ADMIN(
 	id_admin int primary key references usuario(id_usuario) on update cascade on delete cascade
 );
