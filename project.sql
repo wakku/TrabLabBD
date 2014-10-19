@@ -110,9 +110,3 @@ create table DVD(
 	genero varchar(200) not null,
 	classificacao int
 );
-
-create table PROMOCAO(
-	id_promocao bigint primary key default nextval ('PROMOCAO_ID_PROMOCAO_SEQ'),
-	id_produto int references produto(id_produto) not null on update cascade on delete cascade,
-	preco int not null check (preco > 0)
-);
