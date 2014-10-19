@@ -29,14 +29,16 @@ create sequence PROMOCAO_ID_PROMOCAO_SEQ;
 
 create table USUARIO(
 	id_usuario int primary key default NEXTVAL ('USUARIO_ID_USUARIO_SEQ'),
-	nome_cliente varchar(70) not null,
+	login varchar(20) not null unique,
+	senha varchar(20) not null,
+	nome varchar(70) not null,
 	cpf char(11) not null unique,
-	telefone varchar (15),
-	email varchar(40),		
+	email varchar(40),
+	tipo smallint not null
 );
 
 create table ADMIN(
-	id_admin int 
+	id_admin int primary key references usuario(id_usuario) on update cascade on delete cascade
 );
 
 create table CLIENTE(
@@ -48,8 +50,8 @@ create table ENDERECO(
 	id_endereco int primary key default NEXTVAL ('ENDERECO_ID_ENDERECO_SEQ'),
 	logradouro varchar(50) not null,
 	numero varchar(6) not null,
-	complemento varchar(30),
 	cep char(8) not null,
+	bairro varchar(30) not null,
 	cidade varchar(30) not null,
 	estado char(2) not null
 );
