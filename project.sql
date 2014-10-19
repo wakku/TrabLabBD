@@ -95,3 +95,11 @@ create table DVD(
 	genero varchar(200) not null,
 	classificacao int
 );
+
+create trigger aplica_desconto
+    after update on preco_total on COMPRA
+
+    for each row
+    when (preco_total > 500)
+        update preco_total
+        set preco_total = preco_total * salario
