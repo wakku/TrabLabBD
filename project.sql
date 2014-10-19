@@ -28,7 +28,7 @@ create sequence PROMOCAO_ID_PROMOCAO_SEQ;
 --DROP TABLE PROMOCAO_ID_PROMOCAO_SEQ CASCADE;
 
 create table USUARIO(
-	id_usuario int primary key default NEXTVAL ('USUARIO_ID_USUARIO_SEQ'),
+	id_usuario int primary key default nextval ('USUARIO_ID_USUARIO_SEQ'),
 	login varchar(20) not null unique,
 	senha varchar(20) not null,
 	nome varchar(70) not null,
@@ -43,11 +43,11 @@ create table ADMIN(
 
 create table CLIENTE(
 	id_cliente int primary key references usuario(id_usuario) on update cascade on delete cascade,
-	id_endereco int REFERENCES endereco(id_endereco) not null on update cascade on delete cascade
+	id_endereco int references endereco(id_endereco) not null on update cascade on delete cascade
 );
 
 create table ENDERECO(
-	id_endereco int primary key default NEXTVAL ('ENDERECO_ID_ENDERECO_SEQ'),
+	id_endereco int primary key default nextval ('ENDERECO_ID_ENDERECO_SEQ'),
 	logradouro varchar(50) not null,
 	numero varchar(6) not null,
 	cep char(8) not null,
@@ -56,62 +56,63 @@ create table ENDERECO(
 	estado char(2) not null
 );
 
-create table FRETE(
-	id_frete int primary key default NEXTVAL ('FRETE_ID_FRETE_SEQ'),
-	cep_inicio char(8) not null,
-	cep_final char(8) not null,
-	preco int default 0
-);
-
 create table COMPRA(
-	id_venda int default NEXTVAL ('COMPRA_ID_COMPRA_SEQ')primary key,
-	id_cliente int REFERENCES cliente(id_cliente) not null on update cascade on delete cascade,
-	id_frete int REFERENCES cliente(id_cliente) not null on update cascade on delete cascade,
-	produtos int[] not null,
+	id_venda int primary key default nextval ('COMPRA_ID_COMPRA_SEQ'),
+	data timestamp default now(),
+	cliente int references cliente(id_cliente) not null on update cascade on delete cascade,
+	frete decimal(5,2),
+	nota_fiscal int,
+    preco decimal(5,2),
+    promocao
 	dia_hora timestamp default now()
 );
 
 create table VISUALIZACAO(
-	id_visualizacao bigint default NEXTVAL ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') primary key,
-	id_cliente int REFERENCES cliente(id_cliente) not null on update cascade on delete cascade,
-	id_produto int REFERENCES produto(id_produto) not null on update cascade on delete cascade,
-	dia_hora timestamp default now()
+	id_visualizacao bigint default nextval ('VISUALIZACAO_ID_VISUALIZACAO_SEQ') primary key,
+	cliente int references cliente(id_cliente) not null on update cascade on delete cascade,
+	produto int references produto(id_produto) not null on update cascade on delete cascade,
+	data timestamp default now()
 );
 
 create table AVALIACAO(
-	id_avaliacao int default NEXTVAL('AVALIACAO_ID_AVALIACAO_SEQ') primary key,
-	id_cliente int REFERENCES cliente(id_cliente) not null on update cascade on delete cascade,
-	id_produto int REFERENCES produto(id_produto) not null on update cascade on delete cascade,
+	id_avaliacao int default nextval('AVALIACAO_ID_AVALIACAO_SEQ') primary key,
+	cliente int references cliente(id_cliente) not null on update cascade on delete cascade,
+	produto int references produto(id_produto) not null on update cascade on delete cascade,
 	nota smallint check (nota between 0 and 5),
 	comentario varchar(1000)
 );
 
 create table PRODUTO(
-	id_produto int primary key default NEXTVAL('PRODUTO_ID_PRODUTO_SEQ'),
+	id_produto int primary key default nextval('PRODUTO_ID_PRODUTO_SEQ'),
+	cod_barras int not null unique,
+    nome varchar(30) not null,
+    descricao text 
 	imagem oid,
 	categoria varchar(100) not null,
-	em_estoque int check (em_estoque > 0),
-	estoque int check (estoque > 0),
+	estoque int check (estoque >= 0),
 	preco decimal(5,2) not null check (preco > 0)
 );
 
 create table LIVRO(
 	id_livro int primary key references produto(id_produto),
+    autor varchar(200) not null,
 	editora varchar(80) not null
 );
 
 create table CD(
 	id_cd int primary key references produto(id_produto),
+	artista varchar(200) not null,
 	gravadora varchar(80) not null
 );
 
 create table DVD(
 	id_dvd int primary key references produto(id_produto),
+	genero varchar(200) not null,
 	classificacao int
 );
 
 create table PROMOCAO(
-	id_promocao bigint primary key default NEXTVAL ('PROMOCAO_ID_PROMOCAO_SEQ'),
-	id_produto int REFERENCES produto(id_produto) not null on update cascade on delete cascade,
+	id_promocao bigint primary key default nextval ('PROMOCAO_ID_PROMOCAO_SEQ'),
+	id_produto int references produto(id_produto) not null on update cascade on delete cascade,
 	preco int not null check (preco > 0)
 );
