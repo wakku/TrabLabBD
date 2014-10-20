@@ -54,8 +54,9 @@ create table COMPRA(
 create table COMPRA_PRODUTO(
     data timestamp references compra(data) on update cascade on delete cascade,
     cliente int references cliente(id_cliente) on update cascade on delete cascade,
-    produto int references produto(id_produto) on update cascade on delete cascade
-    
+    produto int references produto(id_produto) on update cascade on delete cascade,
+    quantidade int not null check (quantidade > 0),
+    preco decimal(5,2) references produto(preco) on update cascade on delete cascade
 );
 
 create table VISUALIZACAO(
@@ -102,7 +103,15 @@ create table DVD(
 	classificacao int
 );
 
-
+create trigger soma_carrinho
+    after insert of produto on compra_produto as CP
+    
+    for each row
+    begin
+    update compra as C
+    set preco_total = preco_total + CP.preco * CP.quantidade
+    where C.data = CP.data and C.cliente = CP.cliente
+    end
 
 create trigger aplica_desconto
     after update on preco_total on COMPRA
