@@ -42,14 +42,20 @@ create table ENDERECO(
 );
 
 create table COMPRA(
-	id_venda int primary key default nextval ('COMPRA_ID_COMPRA_SEQ'),
+	id_compra int primary key default nextval ('COMPRA_ID_COMPRA_SEQ'),
 	data timestamp default now(),
 	cliente int references cliente(id_cliente) not null on update cascade on delete cascade,
 	frete decimal(5,2),
 	nota_fiscal int not null,
     preco_total decimal(5,2) not null check (preco > 0),
-    promocao decimal(2,2),
-	data timestamp default now()
+    promocao decimal(2,2)
+);
+
+create table COMPRA_PRODUTO(
+    data timestamp references compra(data) on update cascade on delete cascade,
+    cliente int references cliente(id_cliente) on update cascade on delete cascade,
+    produto int references produto(id_produto) on update cascade on delete cascade
+    
 );
 
 create table VISUALIZACAO(
@@ -95,6 +101,8 @@ create table DVD(
 	genero varchar(200) not null,
 	classificacao int
 );
+
+
 
 create trigger aplica_desconto
     after update on preco_total on COMPRA
